@@ -9,8 +9,13 @@
 <body>
     
     <div>
+        <div id="radioBtns" style="display: flex; justify-content: center; margin: 0 auto;">
+            Двигаться равномерно: <input type="radio" id="even" name="move" checked>
+            Двигаться с ускорением: <input type="radio" name="move" id="boost">
+        </div>
         <canvas id="board" style="display: block; border: 1px solid red; margin: 0 auto;" width="500" height="500"></canvas>
     </div>
+    <script src="collection.js"></script>
     <script src="board.js"></script>
     <script src="main.js"></script>
 </body>
