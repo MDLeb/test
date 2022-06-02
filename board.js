@@ -22,6 +22,7 @@ class Figure {
     //a - ускорение
     move = (from, to, speedX, speedY, speedZ, a = 0) => {
         let t = 0;
+        let tStart = Date.now();
         this.a = a;
         let speedRes = Math.pow((Math.pow(speedX, 2) + Math.pow(speedY, 2) + Math.pow(speedZ, 2)), 0.5);
         let aX = a*speedX/speedRes; //ускорение по х
@@ -37,7 +38,7 @@ class Figure {
             this.x = from.x + this.currentSpeedX*t*0.001; //координата по x в момент времени t
             this.y = from.y + this.currentSpeedY*t*0.001; //координата по y в момент времени t
             this.z = from.z + this.currentSpeedZ*t*0.001; //координата по z в момент времени t
-            t += 1;
+            t += 25;
 
             if ((this.currentSpeedX > 0 && (this.x >= to.x) ||
                 (this.currentSpeedX < 0 && (to.x >= this.x)))){ //завершение функции если текущие координаты совпали с требуемыми
@@ -46,9 +47,11 @@ class Figure {
                this.currentSpeedX = 0;
                this.currentSpeedY = 0;
                this.currentSpeedZ = 0;
+               let tFinish = Date.now();
+               //console.log((tFinish-tStart)/1000); //при частоте обновления кадров 25 отличается от заданного на +1,5%
             }
             return [this.x, this.y, this.z, this.currentSpeedRes]; //возвращает текущие координаты x, y, z и результирующую скорость
-        }, 1);
+        }, 25);//25 - частота обновления кадров 
     }
 
     //Функция для равноускоренного движения
@@ -95,7 +98,7 @@ class Board {
         this.interval = setInterval(() => {
             this.clear();
             this.draw()
-        }, 10);
+        }, 25);
         this.X = this.ctx.canvas.offsetLeft;
         this.Y = this.ctx.canvas.offsetTop;
         this.ctx.canvas.addEventListener('click', (e) => {
@@ -103,18 +106,27 @@ class Board {
             this.moveFigTo(e);
         });
         this.figure = new Figure(0, 0, 0, 20, 20, 0);
-        // this.radioBtn = document.querySelectorAll('#radioBtns input');
-        // this.radioBtn.addEventListener('change', () => {console.log('+')})
+        
+        this.radioBtnEvenly = document.querySelector('#radioBtns #even').checked;
+        this.radioBtnWithBoost = document.querySelector('#radioBtns #boost').checked;
+
+        (Array.from(document.querySelectorAll('#radioBtns input')).forEach(radio => {
+            radio.addEventListener('change', () => {
+                this.radioBtnEvenly = document.querySelector('#radioBtns #even').checked;
+                this.radioBtnWithBoost = document.querySelector('#radioBtns #boost').checked;
+        
+            })
+        }));
         this.draw();
     }
 
     moveFigTo = (e) => {
           let x = e.x-this.X;
           let y = e.y-this.Y;
-        i
-          this.figure.moveToEvenly({x:this.figure.x, y:this.figure.y, z:0}, {x:x, y:y, z:0}, 0.2);  //равномерно
         
-        this.figure.moveToWithBoost({x:this.figure.x, y:this.figure.y, z:this.figure.z}, {x:x, y:y, z:0}, 100, 100); //ускоренно
+        this.radioBtnEvenly ? 
+        this.figure.moveToEvenly({x:this.figure.x, y:this.figure.y, z:0}, {x:x, y:y, z:0}, 2) :  //равномерно
+        this.figure.moveToWithBoost({x:this.figure.x, y:this.figure.y, z:this.figure.z}, {x:x, y:y, z:0}, 10, 50); //ускоренно
 
     }    
     draw = () => {

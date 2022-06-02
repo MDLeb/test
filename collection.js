@@ -6,7 +6,7 @@ function Collection () {
     this.set = (key, value) => {
         let ID = Date.now() + Math.floor(Math.random()*150);
         data[ID] = {[key]: value};
-        return data;     
+        return this;     
     }
     this.hasID = (ID) => {
         return ID in data ? true : false;
@@ -51,7 +51,7 @@ function Collection () {
         for (ID in data){
            key in data[ID] ? delete data[ID] : ''
         }
-        return this.get();
+        return this;
     }
 
     this.union = (...args) => {
