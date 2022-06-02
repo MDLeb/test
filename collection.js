@@ -14,7 +14,6 @@ function Collection () {
     this.hasKey = (key) => {
         for (ID in data) {
             if(key in data[ID]) return true;
-            else continue;
         }
         return false;
     }
@@ -37,11 +36,9 @@ function Collection () {
     this.getByID = (ID) => {
         return data[ID] ? data[ID] : false;
     }
-    this.hasIndex = (index) => {
-        return Object.entries(data)[index] ? true : false;
-    }
     this.getByIndex = (index) => {
-        return Object.entries(data)[index];
+        if(!Object.entries(data)[index]) return null;
+        return Object.entries(data)[index][1];
     }
     this.removeById = (ID) => {
         delete data[ID];
